@@ -26,7 +26,7 @@
 name: 'Build (windows)'
 
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       platform:
         required: true
@@ -37,12 +37,12 @@ on:
       make-target:
         required: false
         type: string
-        default: 'product-bundles test-bundles'
+        default: 'images' #'product-bundles test-bundles'
       debug-levels:
         required: false
         type: string
         default: '[ "debug", "release" ]'
-      msvc-toolset-version:
+      msvc-toolset-version: #14.44.35207
         required: true
         type: string
       msvc-toolset-architecture:
@@ -63,7 +63,7 @@ env:
 jobs:
   build-windows:
     name: build
-    runs-on: windows-2025
+    runs-on: windows-11-arm
     defaults:
       run:
         shell: bash
