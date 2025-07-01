@@ -45,7 +45,15 @@ runs:
         make -k LOG=info ${{ inputs.make-target }}
         || bash ./.github/scripts/gen-build-failure-report.sh "$GITHUB_STEP_SUMMARY"
       shell: bash
-
+    - name: 'zip the created jdk directory and name it jdk-<platform>-<debug-suffix>_bin.zip'
+      run: |
+        cd build/windows-aarch64/images/jdk
+        zip -r jdk-${{ inputs.platform }}_bin${{ inputs.debug-suffix }}.zip . -x '*/.git*' '*/.github/*' '*/test/*' '*/demo'
+        mkdir -p bundles
+        mv jdk-${{ inputs.platform }}_bin${{ inputs.debug-suffix }}.zip ../bundles/
+        mv bundles ../../../
+      shell: bash
+      if: inputs.platform == 'windows-arm64'
     - name: 'Check for failure'
       id: check
       run: |
